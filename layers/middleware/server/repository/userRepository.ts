@@ -1,6 +1,5 @@
 import { firestoreClient } from '../utils/firebase.client'
 import {
-    createDocument,
     updateDocument,
     getDocumentById,
     getPaginatedDocuments,
@@ -10,6 +9,7 @@ import type {
     User,
     PaginationParams
 } from '../types/types'
+import {Timestamp} from "firebase-admin/firestore";
 
 const COLLECTION_NAME = 'users'
 
@@ -71,9 +71,12 @@ export async function createOrUpdateUser(userData: CreateUserInput): Promise<Use
     // Create new user
     const userId = userData.id || generateId()
     const timestamps = {
-        createdAt: new Date(),
-        updatedAt: new Date()
+        createdAt: Timestamp.now(),
+        updatedAt: Timestamp.now()
     }
+
+    const oneYearFromNow = new Date();
+    oneYearFromNow.setFullYear(oneYearFromNow.getFullYear() + 1);
 
     const newUser: Omit<User, 'id'> & { id: string } = {
         id: userId,
@@ -85,11 +88,13 @@ export async function createOrUpdateUser(userData: CreateUserInput): Promise<Use
         ...timestamps,
         subscription: {
             plan: 'free',
-            expiresAt: undefined
+            expiresAt: Timestamp.fromDate(oneYearFromNow)
         }
     }
 
-    return createDocument<User>(COLLECTION_NAME, newUser, userId)
+    await firestoreClient.collection(COLLECTION_NAME).doc(newUser.id).set(newUser, { merge: true })
+
+    return newUser
 }
 
 // Get user by ID

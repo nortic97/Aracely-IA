@@ -1,6 +1,6 @@
-import { firestoreClient } from '../layers/base/server/utils/firebase.client'
+import { firestoreClient } from '../layers/middleware/server/utils/firebase.client'
 import { Timestamp } from 'firebase-admin/firestore'
-import { generateId, validateId } from '../layers/base/server/utils/firestore.helpers'
+import { generateId, validateId } from '../layers/middleware/server/utils/firestore.helpers'
 
 // Tipos para los datos de chat
 interface ChatData {
@@ -312,9 +312,9 @@ async function findExistingAgent(name: string, model: string): Promise<boolean> 
 
 // IDs de usuarios para asignar agentes
 const USER_IDS = [
-  '26ecdc45-a0a3-4048-8535-acfcd10c228c',
-  '5547ab2e-0125-4ae3-8055-2d156efc57bd',
-  'c11f00cf-33d4-4e2f-a0fd-d6e12c5c56b2'
+  '37e8f1ac-9d73-4101-ae84-8c6a04a4c98a',
+    '26ecdc45-a0a3-4048-8535-acfcd10c228c',
+
 ]
 
 // Función para limpiar colecciones excepto usuarios

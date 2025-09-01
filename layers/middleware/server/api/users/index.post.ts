@@ -29,7 +29,7 @@ export default defineEventHandler(async (event): Promise<ApiResponse<User>> => {
             email: body.email.trim().toLowerCase(),
             name: body.name || null,
             avatar: body.avatar || null,
-            provider: body.provider || null
+            provider: body.provider || null,
         })
 
         return {
